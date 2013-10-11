@@ -435,5 +435,6 @@ struct lua_Debug {
 * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ******************************************************************************/
 
+LUALIB_API lua_CFunction lua_setSearchEx(lua_CFunction func);
 
 #endif

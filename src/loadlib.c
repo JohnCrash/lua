@@ -409,6 +409,21 @@ static int searcher_Lua (lua_State *L) {
   return checkload(L, (luaL_loadfile(L, filename) == LUA_OK), filename);
 }
 
+/* 一个外部的searcher 使得lua可以支持加载如zip中的lua文件 */
+static lua_CFunction searcher_ex = 0;
+LUALIB_API lua_CFunction lua_setSearchEx(lua_CFunction func)
+{
+	lua_CFunction f = searcher_ex;
+	searcher_ex = func;
+	return f;
+}
+
+static int searcher_Ex(lua_State *L)
+{
+	if( searcher_ex )
+		return searcher_ex(L);
+	return 1;
+}
 
 static int loadfunc (lua_State *L, const char *filename, const char *modname) {
   const char *funcname;
@@ -667,7 +682,7 @@ static const luaL_Reg ll_funcs[] = {
 
 
 static const lua_CFunction searchers[] =
-  {searcher_preload, searcher_Lua, searcher_C, searcher_Croot, NULL};
+  {searcher_preload, searcher_Lua, searcher_Ex, searcher_C, searcher_Croot, NULL};
 
 
 LUAMOD_API int luaopen_package (lua_State *L) {

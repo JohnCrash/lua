@@ -88,8 +88,9 @@ set(SOURCE_FILES
 	src/lundump.c
 	src/lvm.c
 	src/lzio.c
-	src/luac.c
-	src/lua.c
+#如果编译成动态库会出问题
+#	src/luac.c
+#	src/lua.c
 	src/lfs/lfs.c
 	src/socket/auxiliar.c
 	src/socket/buffer.c
@@ -169,6 +170,14 @@ include_directories(
 src
 )
 
-add_library(lua STATIC ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES})
+option(LUA_STATIC "Static build" FALSE)
+
+if (LUA_STATIC)
+	set(LUA_LIB_TYPE STATIC)
+else()
+	set(LUA_LIB_TYPE SHARED)
+endif()
+
+add_library(lua ${LUA_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES})
 
 

@@ -180,4 +180,15 @@ endif()
 
 add_library(lua ${LUA_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES})
 
+#编译解释器	
+option(LUA_INTERPRETER "Compile lua interpreter" FALSE)
+if(LUA_INTERPRETER)
+	set(SOURCE_FILES ${SOURCE_FILES} src/lua.c)
+	add_executable(luac src/lua.c)
+	set(LUA_LIBRARIES lua)
+	target_link_libraries(luac ${LUA_LIBRARIES})
+	add_dependencies(luac lua)
+endif()
+
+
 
